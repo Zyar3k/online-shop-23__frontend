@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import CartIcon from "./CartIcon";
 
 const Layout = ({ children }) => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -46,6 +47,7 @@ const Layout = ({ children }) => {
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
+              <CartIcon />
               <Button
                 as={"a"}
                 fontSize={"sm"}
