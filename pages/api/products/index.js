@@ -9,7 +9,6 @@ const router = createRouter();
 router.get(async (req, res) => {
   await db.connect();
   const products = await Product.find({});
-  console.log(products);
   await db.disconnect(products);
 
   res.send(products);
