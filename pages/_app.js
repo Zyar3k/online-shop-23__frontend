@@ -3,12 +3,16 @@ import "@/styles/globals.css";
 
 import { ChakraProvider } from "@chakra-ui/react";
 
+import { CartProvider } from "@/context/CartReducer";
+
 export default function App({ Component, pageProps }) {
   return (
     <ChakraProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <CartProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </CartProvider>
     </ChakraProvider>
   );
 }
