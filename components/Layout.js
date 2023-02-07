@@ -33,7 +33,7 @@ const Layout = ({ children }) => {
           borderColor={useColorModeValue("gray.200", "gray.900")}
           align={"center"}
         >
-          <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
+          <Flex flex={{ base: 1 }} justify={{ base: "start", md: "start" }}>
             <Link href={"/"} passHref>
               <Text
                 fontFamily={"heading"}

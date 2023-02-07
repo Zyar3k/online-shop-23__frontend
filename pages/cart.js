@@ -3,13 +3,18 @@ import { useContext } from "react";
 import CartItem from "@/components/CartItem";
 import { CartContext } from "@/context/CartReducer";
 import { Box, Text, Stack, Heading, Flex } from "@chakra-ui/react";
+import OrderSummary from "@/components/OrderSummary";
 
 const CartPage = () => {
   const { cart } = useContext(CartContext);
+
+  const calculateSum = (cartItems) => {
+    return cartItems.reduce((acc, item) => acc + item.price, 0);
+  };
   return (
     <Box
       maxW={{ base: "3xl", lg: "7xl" }}
-      max="auto"
+      mx="auto"
       px={{ base: "4", md: "8", lg: "12" }}
       py={{ base: "6", md: "8", lg: "12" }}
     >
@@ -34,11 +39,10 @@ const CartPage = () => {
                   cart.map((item) => <CartItem key={item.id} item={item} />)}
               </Stack>
             </Stack>
+            <Flex direction="column" align="center" flex="1">
+              <OrderSummary total={calculateSum(cart)} />
+            </Flex>
           </Stack>
-          <Flex direction="column" align="center" flex="1">
-            {/* TODO */}
-            Order component
-          </Flex>
         </>
       )}
     </Box>
