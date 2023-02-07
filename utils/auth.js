@@ -1,4 +1,13 @@
 import jwt from "jsonwebtoken";
+import { hash } from "bcryptjs";
+
+export const hashPassword = async (password) => {
+  if (password.length < 8) {
+    throw new Error("Password must be 8 chars or longer");
+  }
+
+  return await hash(password, 12);
+};
 
 export const signToken = (user) => {
   return jwt.sign(
