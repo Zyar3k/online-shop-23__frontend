@@ -15,7 +15,7 @@ const CartIcon = () => {
         icon={<Text fontSize="2xl">🛒</Text>}
         variant="ghost"
         color={iconColor[colorMode]}
-        _hover={hoverColor[colorMode]}
+        hover={hoverColor[colorMode]}
       />
       {cart.length > 0 && (
         <Box

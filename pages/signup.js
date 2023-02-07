@@ -15,7 +15,8 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 
-const LoginPage = () => {
+const SignUpPage = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("handleSubmit");
+    console.log("handleSubmit signUp");
   };
 
   return (
@@ -35,12 +36,12 @@ const LoginPage = () => {
     >
       <Stack spacing="8">
         <Stack spacing="6">
-          <Heading>Log in to your account</Heading>
+          <Heading>Create an account</Heading>
           <HStack spacing="1" textAlign="center">
-            <Text>Don&apos;t have an account?</Text>
-            <Link passHref href="/signup">
+            <Text>Already have an account?</Text>
+            <Link passHref href="/login">
               <Button variant="link" colorScheme="green">
-                Sign up
+                Sign in
               </Button>
             </Link>
           </HStack>
@@ -56,6 +57,14 @@ const LoginPage = () => {
         <form onSubmit={handleSubmit}>
           <Stack spacing="6">
             <Stack spacing="6">
+              <FormControl>
+                <FormLabel htmlFor="name">Full name</FormLabel>
+                <Input
+                  id="name"
+                  type="text"
+                  onChange={(e) => setName(e.target.value)}
+                ></Input>
+              </FormControl>
               <FormControl>
                 <FormLabel htmlFor="email">Email address</FormLabel>
                 <Input
@@ -73,14 +82,9 @@ const LoginPage = () => {
                 ></Input>
               </FormControl>
             </Stack>
-            <HStack justify="space-between">
-              <Button variant="green" size="sm">
-                Forgot password?
-              </Button>
-            </HStack>
             <Stack>
               <Button colorScheme="green" type="submit">
-                Login
+                Signup
               </Button>
             </Stack>
           </Stack>
@@ -90,4 +94,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
