@@ -12,8 +12,20 @@ import {
   Input,
   useColorModeValue,
   useBreakpointValue,
+  FormHelperText,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import * as yup from "yup";
+
+let signUpSchema = yup.object().shape({
+  name: yup.string().required("Name is required field"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 char")
+    .required("Password is required"),
+  name: yup.string().required(),
+});
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
@@ -22,10 +34,29 @@ const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("handleSubmit signUp");
+    try {
+      await signUpSchema.validate(
+        {
+          password,
+          email,
+        },
+        {
+          abortEarly: false,
+        }
+      );
+    } catch (error) {
+      const validationErrors = {};
+      if (error instanceof yup.ValidationError) {
+        error.inner.forEach(({ path, message }) => {
+          validationErrors[path] = message;
+        });
+      }
+      setError(validationErrors);
+      return;
+    }
   };
 
   return (
@@ -58,12 +89,15 @@ const SignUpPage = () => {
           <Stack spacing="6">
             <Stack spacing="6">
               <FormControl>
-                <FormLabel htmlFor="name">Full name</FormLabel>
+                <FormLabel htmlFor="name">Full Name</FormLabel>
                 <Input
                   id="name"
                   type="text"
                   onChange={(e) => setName(e.target.value)}
                 ></Input>
+                <FormHelperText color={"red.500"} id="name-helper-text">
+                  {error.name}
+                </FormHelperText>
               </FormControl>
               <FormControl>
                 <FormLabel htmlFor="email">Email address</FormLabel>
@@ -72,6 +106,9 @@ const SignUpPage = () => {
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
                 ></Input>
+                <FormHelperText color={"red.500"} id="email-helper-text">
+                  {error.email}
+                </FormHelperText>
               </FormControl>
               <FormControl>
                 <FormLabel htmlFor="password">Password</FormLabel>
@@ -80,6 +117,9 @@ const SignUpPage = () => {
                   type="password"
                   onChange={(e) => setPassword(e.target.value)}
                 ></Input>
+                <FormHelperText color={"red.500"} id="password-helper-text">
+                  {error.password}
+                </FormHelperText>
               </FormControl>
             </Stack>
             <Stack>

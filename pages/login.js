@@ -12,8 +12,19 @@ import {
   Input,
   useColorModeValue,
   useBreakpointValue,
+  FormHelperText,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import * as yup from "yup";
+
+let loginSchema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 char")
+    .required("Password is required"),
+  name: yup.string().required(),
+});
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -21,10 +32,29 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("handleSubmit");
+    try {
+      await loginSchema.validate(
+        {
+          password,
+          email,
+        },
+        {
+          abortEarly: false,
+        }
+      );
+    } catch (error) {
+      const validationErrors = {};
+      if (error instanceof yup.ValidationError) {
+        error.inner.forEach(({ path, message }) => {
+          validationErrors[path] = message;
+        });
+      }
+      setError(validationErrors);
+      return;
+    }
   };
 
   return (
@@ -63,6 +93,9 @@ const LoginPage = () => {
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
                 ></Input>
+                <FormHelperText color={"red.500"} id="email-helper-text">
+                  {error.email}
+                </FormHelperText>
               </FormControl>
               <FormControl>
                 <FormLabel htmlFor="password">Password</FormLabel>
@@ -71,6 +104,9 @@ const LoginPage = () => {
                   type="password"
                   onChange={(e) => setPassword(e.target.value)}
                 ></Input>
+                <FormHelperText color={"red.500"} id="password-helper-text">
+                  {error.password}
+                </FormHelperText>
               </FormControl>
             </Stack>
             <HStack justify="space-between">
