@@ -1,8 +1,10 @@
 import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import Products from "@/components/Products";
-import { useEffect, useState } from "react";
+
+import styles from "@/styles/Home.module.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,7 +13,10 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const store = useSelector((state) => state);
+
   useEffect(() => {
+    console.log(store);
     fetchProducts();
   }, []);
 

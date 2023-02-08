@@ -1,4 +1,4 @@
-import { CartContext } from "@/context/CartReducer";
+import { CartContext } from "@/context/CartContext";
 import { Box, useColorMode, IconButton, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 

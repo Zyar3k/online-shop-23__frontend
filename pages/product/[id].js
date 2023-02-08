@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import db from "@/utils/db";
 import Product from "@/models/Product";
-import { CartContext } from "@/context/CartReducer";
+import { CartContext } from "@/context/CartContext";
 
 const ProductPage = (props) => {
   const { addToCart } = useContext(CartContext);
