@@ -9,13 +9,15 @@ import {
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import CartIcon from "./CartIcon";
-import Link from "next/link";
 
 const Layout = ({ children }) => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const { data: session, status } = useSession();
   return (
     <div>
       <Head>
@@ -51,27 +53,47 @@ const Layout = ({ children }) => {
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
-              <Link href={"/cart"} passHref>
+              <Link href="/cart" passHref>
                 <CartIcon />
               </Link>
-              <Button
-                as={"a"}
-                fontSize={"sm"}
-                fontWeight={400}
-                variant={"link"}
-              >
-                Sign In
-              </Button>
-              <Button
-                fontSize={"sm"}
-                fontWeight={600}
-                color={"white"}
-                bg={"green.400"}
-                href={"#"}
-                _hover={{ bg: "green.300" }}
-              >
-                Sign Up
-              </Button>
+              {status === "authenticated" ? (
+                <Button
+                  display={"inline-flex"}
+                  fontSize={"sm"}
+                  fontWeight={600}
+                  color={"white"}
+                  bg={"green.400"}
+                  href={"#"}
+                  _hover={{ bg: "green.300" }}
+                  onClick={() => signOut()}
+                >
+                  Sign out
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    as={"a"}
+                    fontSize={"sm"}
+                    fontWeight={400}
+                    variant={"link"}
+                    href={"/login"}
+                  >
+                    Sign In
+                  </Button>
+
+                  <Button
+                    display={{ base: "none", md: "inline-flex" }}
+                    fontSize={"sm"}
+                    fontWeight={600}
+                    color={"white"}
+                    bg={"green.400"}
+                    href={"/signup"}
+                    _hover={{ bg: "green.300" }}
+                  >
+                    Sign Up
+                  </Button>
+                </>
+              )}
             </Stack>
           </Flex>
         </Flex>

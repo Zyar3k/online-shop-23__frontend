@@ -1,18 +1,24 @@
-import Layout from "@/components/Layout";
-import "@/styles/globals.css";
-
+import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
+import Layout from "@/components/Layout";
 
 import { CartProvider } from "@/context/CartReducer";
 
-export default function App({ Component, pageProps }) {
+import "@/styles/globals.css";
+
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}) {
   return (
     <ChakraProvider>
-      <CartProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </CartProvider>
+      <SessionProvider session={session}>
+        <CartProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </CartProvider>
+      </SessionProvider>
     </ChakraProvider>
   );
 }
