@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import * as yup from "yup";
+import { signIn } from "next-auth/react";
 
 let loginSchema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -23,7 +24,6 @@ let loginSchema = yup.object().shape({
     .string()
     .min(8, "Password must be at least 8 char")
     .required("Password is required"),
-  name: yup.string().required(),
 });
 
 const LoginPage = () => {
@@ -45,6 +45,7 @@ const LoginPage = () => {
           abortEarly: false,
         }
       );
+      console.log(email, password);
     } catch (error) {
       const validationErrors = {};
       if (error instanceof yup.ValidationError) {
@@ -55,6 +56,21 @@ const LoginPage = () => {
       setError(validationErrors);
       return;
     }
+
+    const result = await signIn("credentials", {
+      email: email,
+      password: password,
+      callbackUrl: "/",
+      redirect: true,
+    });
+
+    if (result.error) {
+      setError(result.error);
+      console.log(error);
+    }
+
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -89,9 +105,11 @@ const LoginPage = () => {
               <FormControl>
                 <FormLabel htmlFor="email">Email address</FormLabel>
                 <Input
+                  value={email}
                   id="email"
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="false"
                 ></Input>
                 <FormHelperText color={"red.500"} id="email-helper-text">
                   {error.email}
@@ -100,6 +118,7 @@ const LoginPage = () => {
               <FormControl>
                 <FormLabel htmlFor="password">Password</FormLabel>
                 <Input
+                  value={password}
                   id="password"
                   type="password"
                   onChange={(e) => setPassword(e.target.value)}

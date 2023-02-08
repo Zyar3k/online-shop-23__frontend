@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import * as yup from "yup";
+import { signIn } from "next-auth/react";
 
 let signUpSchema = yup.object().shape({
   name: yup.string().required("Name is required field"),
@@ -24,7 +25,6 @@ let signUpSchema = yup.object().shape({
     .string()
     .min(8, "Password must be at least 8 char")
     .required("Password is required"),
-  name: yup.string().required(),
 });
 
 const SignUpPage = () => {
@@ -40,8 +40,8 @@ const SignUpPage = () => {
     try {
       await signUpSchema.validate(
         {
-          password,
           email,
+          password,
         },
         {
           abortEarly: false,
@@ -57,6 +57,42 @@ const SignUpPage = () => {
       setError(validationErrors);
       return;
     }
+
+    fetch("/api/auth/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password,
+      }),
+    })
+      .then((res) => {
+        if (res.status === 201) {
+          console.log("User created successfully");
+          signIn("credentials", {
+            email: email,
+            password: password,
+            callbackUrl: "/",
+            redirect: true,
+          })
+            .then((result) => {
+              console.log(result);
+            })
+            .catch((error) => {
+              setError({ api: error.toString() });
+            });
+        } else {
+          console.log("User creation failed");
+          setError({ api: "Could not create an account. Please try later" });
+        }
+      })
+      .catch((error) => console.log("error", error));
+
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -91,6 +127,7 @@ const SignUpPage = () => {
               <FormControl>
                 <FormLabel htmlFor="name">Full Name</FormLabel>
                 <Input
+                  value={name}
                   id="name"
                   type="text"
                   onChange={(e) => setName(e.target.value)}
@@ -102,6 +139,7 @@ const SignUpPage = () => {
               <FormControl>
                 <FormLabel htmlFor="email">Email address</FormLabel>
                 <Input
+                  value={email}
                   id="email"
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
@@ -113,6 +151,7 @@ const SignUpPage = () => {
               <FormControl>
                 <FormLabel htmlFor="password">Password</FormLabel>
                 <Input
+                  value={password}
                   id="password"
                   type="password"
                   onChange={(e) => setPassword(e.target.value)}

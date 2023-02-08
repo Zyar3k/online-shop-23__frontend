@@ -1,4 +1,4 @@
-import NextAuth from "next-auth/next";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export default NextAuth({
@@ -11,13 +11,16 @@ export default NextAuth({
       name: "EzzyShop",
       credentials: {},
       async authorize(credentials) {
-        const authResponse = await fetch("/users/login", {
-          method: "POST",
-          headers: {
-            "Content=Type": "application/json",
-          },
-          body: JSON.stringify(credentials),
-        });
+        const authResponse = await fetch(
+          "http://localhost:3000/api/users/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(credentials),
+          }
+        );
 
         if (!authResponse.ok) {
           return null;

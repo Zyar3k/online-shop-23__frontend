@@ -43,7 +43,7 @@ async function handler(req, res) {
   });
 
   res.status(201).json({ message: "User created!" });
-  db.disconnect();
+  await db.disconnect();
 }
 
 export default handler;

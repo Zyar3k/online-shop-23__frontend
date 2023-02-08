@@ -8,12 +8,14 @@ import { signToken } from "@/utils/auth";
 // You may want to pass in NextApiRequest and NextApiResponse
 const router = createRouter();
 
-router.get(async (req, res) => {
+router.post(async (req, res) => {
   await db.connect();
   const user = await User.findOne({ email: req.body.email });
   await db.disconnect();
+
   if (user && bcrypt.compareSync(req.body.password, user.password)) {
     const token = signToken(user);
+
     res.send({
       token,
       _id: user._id,
