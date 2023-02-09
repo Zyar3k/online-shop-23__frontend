@@ -16,7 +16,6 @@ export default function Home() {
   const store = useSelector((state) => state);
 
   useEffect(() => {
-    console.log(store);
     fetchProducts();
   }, []);
 
