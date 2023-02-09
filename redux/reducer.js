@@ -4,7 +4,7 @@ const initialState = {
     fullName: "",
     address: "",
     city: "",
-    postalCode: "",
+    postCode: "",
     country: "",
   },
 };
