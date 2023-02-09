@@ -6,8 +6,35 @@ const initialState = {
 
 const cartReducer = (state, action) => {
   switch (action.type) {
-    case "ADD_ITEM":
-      return { ...state, cart: [...state.cart, action.payload] };
+    case "ADD_ITEM": {
+      const itemInCart = state.cart.find(
+        (item) => item.id === action.payload.id
+      );
+      if (itemInCart) {
+        return {
+          ...state,
+          cart: state.cart.map((item) =>
+            item.id === action.payload.id
+              ? { ...item, qty: item.qty + 1 }
+              : item
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          cart: [...state.cart, { ...action.payload, qty: 1 }],
+        };
+      }
+    }
+    case "UPDATE_QTY":
+      return {
+        ...state,
+        cart: state.cart.map((item) =>
+          item.id === action.payload.id
+            ? { ...item, qty: action.payload.qty }
+            : item
+        ),
+      };
     case "REMOVE_ITEM":
       return {
         ...state,
@@ -29,9 +56,14 @@ const CartProvider = ({ children }) => {
   const removeFromCart = (itemId) => {
     dispatch({ type: "REMOVE_ITEM", payload: itemId });
   };
+  const updateQty = (itemId, qty) => {
+    dispatch({ type: "UPDATE_QTY", payload: { id: itemId, qty } });
+  };
 
   return (
-    <CartContext.Provider value={{ ...state, addToCart, removeFromCart }}>
+    <CartContext.Provider
+      value={{ ...state, addToCart, removeFromCart, updateQty }}
+    >
       {children}
     </CartContext.Provider>
   );

@@ -95,7 +95,7 @@ const ShippingAddressForm = () => {
         </FormHelperText>
       </FormControl>
       <FormControl>
-        <FormLabel htmlFor="postCode">Postal Code</FormLabel>
+        <FormLabel htmlFor="postCode">Postcode</FormLabel>
         <Input
           onChange={handleChange}
           value={formValues.postCode}
