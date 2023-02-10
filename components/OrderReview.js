@@ -5,7 +5,7 @@ import {
   Box,
   Stack,
   StackDivider,
-  Test,
+  Text,
   Flex,
   Button,
 } from "@chakra-ui/react";
@@ -15,9 +15,9 @@ const OrderReview = () => {
   const { cart } = useContext(CartContext);
   const state = useSelector((state) => state);
 
+  const itemsPrice = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
   const shippingPrice = itemsPrice > 200 ? 0 : 15;
   const taxPrice = itemsPrice * 0.15;
-  const itemsPrice = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
   const totalPrice = shippingPrice + taxPrice + itemsPrice;
 
   return (

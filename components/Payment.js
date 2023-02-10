@@ -23,8 +23,8 @@ const PaymentMethod = () => {
   };
 
   return (
-    <Box display="flex" direction="column">
-      <RadioGroup onCHange={handlePaymentMethodChange} value={paymentMethod}>
+    <Box display="flex" flexDirection="column">
+      <RadioGroup onChange={handlePaymentMethodChange} value={paymentMethod}>
         <Stack direction="column">
           <Radio value="paypal">Paypal</Radio>
         </Stack>

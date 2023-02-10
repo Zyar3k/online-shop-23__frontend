@@ -15,7 +15,7 @@ const shippingAddressSchema = Yup.object().shape({
   fullName: Yup.string().required("Name is required"),
   address: Yup.string().required("Address is required"),
   city: Yup.string().required("City is required"),
-  postCode: Yup.string().required("Postcode is required"),
+  postcode: Yup.string().required("Postcode is required"),
   country: Yup.string().required("Country is required"),
 });
 
@@ -26,7 +26,7 @@ const ShippingAddressForm = () => {
   const [formValues, setFormValues] = useState(
     address
       ? address
-      : { fullName: "", address: "", city: "", postCode: "", country: "" }
+      : { fullName: "", address: "", city: "", postcode: "", country: "" }
   );
 
   const handleChange = (e) => {
@@ -43,7 +43,6 @@ const ShippingAddressForm = () => {
       await shippingAddressSchema.validate(formValues, {
         abortEarly: false,
       });
-      console.log(email, password);
     } catch (error) {
       const validationErrors = {};
       if (error instanceof Yup.ValidationError) {
@@ -54,7 +53,9 @@ const ShippingAddressForm = () => {
       setError(validationErrors);
       return;
     }
-    dispatchEvent({ type: "address/saveShippingAddress", payload: formValues });
+    dispatch({ type: "address/saveShippingAddress", payload: formValues });
+
+    dispatch({ type: "checkout/nextStep" });
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -95,15 +96,15 @@ const ShippingAddressForm = () => {
         </FormHelperText>
       </FormControl>
       <FormControl>
-        <FormLabel htmlFor="postCode">Postcode</FormLabel>
+        <FormLabel htmlFor="postcode">Postcode</FormLabel>
         <Input
           onChange={handleChange}
-          value={formValues.postCode}
+          value={formValues.postcode}
           placeholder="BR4X8X"
-          name="postCode"
+          name="postcode"
         ></Input>
-        <FormHelperText color={"red.500"} id="postCode-helper-text">
-          {error.postCode}
+        <FormHelperText color={"red.500"} id="postcode-helper-text">
+          {error.postcode}
         </FormHelperText>
       </FormControl>
       <FormControl>

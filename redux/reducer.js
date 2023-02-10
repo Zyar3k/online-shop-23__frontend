@@ -5,7 +5,7 @@ const initialState = {
     fullName: "",
     address: "",
     city: "",
-    postCode: "",
+    postcode: "",
     country: "",
   },
   paymentMethod: "",
