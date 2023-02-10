@@ -49,6 +49,28 @@ const OrderReview = () => {
             : "PayPal"}
         </Text>
       </Box>
+      <Box>
+        <Heading size="xs" textTransform={"uppercase"}>
+          Order summary
+        </Heading>
+        <Text pt="2" fontSize="sm">
+          Items: £{itemsPrice}
+        </Text>
+        <Text pt="2" fontSize="sm">
+          Shipping: £{shippingPrice}
+        </Text>
+        <Text pt="2" fontSize="sm">
+          Tax: £{taxPrice}
+        </Text>
+        <Text pt="2" fontSize="sm">
+          Total: £{totalPrice}
+        </Text>
+      </Box>
+      <Flex justify="center" align="center">
+        <Button colorScheme="blue" size="sm">
+          Place order
+        </Button>
+      </Flex>
     </Stack>
   );
 };

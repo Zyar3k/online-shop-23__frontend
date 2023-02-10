@@ -1,5 +1,4 @@
 import React from "react";
-import ShippingAddressForm from "@/components/forms/Shipping";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -11,6 +10,9 @@ import {
   Progress,
   Stack,
 } from "@chakra-ui/react";
+import ShippingAddressForm from "@/components/forms/Shipping";
+import OrderReview from "@/components/OrderReview";
+import PaymentMethod from "@/components/Payment";
 
 const CheckoutPage = () => {
   const dispatch = useDispatch();
@@ -18,8 +20,8 @@ const CheckoutPage = () => {
 
   const steps = [
     { name: "Shipping", component: <ShippingAddressForm /> },
-    { name: "Payment", component: <div>Payment</div> },
-    { name: "Review", component: <div>Review</div> },
+    { name: "Payment", component: <PaymentMethod /> },
+    { name: "Review", component: <OrderReview /> },
   ];
   return (
     <Stack spacing={4}>

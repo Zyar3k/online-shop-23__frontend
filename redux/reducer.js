@@ -8,6 +8,7 @@ const initialState = {
     postCode: "",
     country: "",
   },
+  paymentMethod: "",
 };
 
 export const reducer = (state = initialState, action) => {
@@ -20,6 +21,8 @@ export const reducer = (state = initialState, action) => {
       return { ...state, currentStep: state.currentStep + 1 };
     case "checkout/prevStep":
       return { ...state, currentStep: state.currentStep - 1 };
+    case "checkout/paymentMethod":
+      return { ...state, paymentMethod: action.payload };
     default:
       return state;
   }
