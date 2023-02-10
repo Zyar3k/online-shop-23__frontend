@@ -75,13 +75,23 @@ const OrderReview = () => {
   };
   useEffect(() => {
     if (displayPaypalButtons) {
-      paypalDispatch({
-        type: "resetOptions",
-        value: {
-          "client-id": "test",
-          currency: "GBP",
-        },
-      });
+      const loadPaymentScript = async () => {
+        const response = await fetch("/api/keys/paypal", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const { clientId } = await response.json();
+        paypalDispatch({
+          type: "resetOptions",
+          value: {
+            "client-id": clientId,
+            currency: "GBP",
+          },
+        });
+      };
+      loadPaymentScript();
     }
   }, [displayPaypalButtons]);
   return (
