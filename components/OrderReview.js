@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   Heading,
@@ -8,18 +8,82 @@ import {
   Text,
   Flex,
   Button,
+  CircularProgress,
+  useToast,
 } from "@chakra-ui/react";
+import { usePayPalScriptReducer, PayPalButtons } from "@paypal/react-paypal-js";
 import { CartContext } from "@/context/CartContext";
 
 const OrderReview = () => {
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+  const [displayPaypalButtons, setDisplayPaypalButtons] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
+  const [error, setError] = useState(false);
   const { cart } = useContext(CartContext);
   const state = useSelector((state) => state);
+
+  const toast = useToast();
 
   const itemsPrice = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
   const shippingPrice = itemsPrice > 200 ? 0 : 15;
   const taxPrice = itemsPrice * 0.15;
   const totalPrice = shippingPrice + taxPrice + itemsPrice;
 
+  const handlePlaceOrder = () => {
+    setDisplayPaypalButtons(true);
+  };
+
+  const createOrder = (data, actions) => {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: {
+              value: totalPrice,
+            },
+          },
+        ],
+      })
+      .then((orderID) => {
+        return orderID;
+      });
+  };
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then((details) => {
+      // TODO changes in db
+      console.log(details);
+      setIsPaid(true);
+      toast({
+        title: "Payment successful",
+        description: "Thank you for your order",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    });
+  };
+
+  const onError = (error) => {
+    setError(true);
+    toast({
+      title: "Something went wrong",
+      description: "Payment failed",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    });
+  };
+  useEffect(() => {
+    if (displayPaypalButtons) {
+      paypalDispatch({
+        type: "resetOptions",
+        value: {
+          "client-id": "test",
+          currency: "GBP",
+        },
+      });
+    }
+  }, [displayPaypalButtons]);
   return (
     <Stack divider={<StackDivider />} spacing="4">
       <Box>
@@ -67,9 +131,21 @@ const OrderReview = () => {
         </Text>
       </Box>
       <Flex justify="center" align="center">
-        <Button colorScheme="blue" size="sm">
-          Place order
-        </Button>
+        {displayPaypalButtons ? (
+          isPending ? (
+            <CircularProgress isIndeterminate color="blue.500" />
+          ) : (
+            <PayPalButtons
+              createOrder={createOrder}
+              onApprove={onApprove}
+              onError={onError}
+            />
+          )
+        ) : (
+          <Button colorScheme="blue" size="sm" onClick={handlePlaceOrder}>
+            Place order
+          </Button>
+        )}
       </Flex>
     </Stack>
   );

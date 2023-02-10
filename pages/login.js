@@ -45,7 +45,6 @@ const LoginPage = () => {
           abortEarly: false,
         }
       );
-      console.log(email, password);
     } catch (error) {
       const validationErrors = {};
       if (error instanceof yup.ValidationError) {
