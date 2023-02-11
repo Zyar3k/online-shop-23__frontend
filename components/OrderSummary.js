@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import {
   Button,
   Flex,
@@ -8,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 
 const OrderSummary = ({ total }) => {
+  const router = useRouter();
   return (
     <Stack
       spacing={"8"}
@@ -28,6 +30,7 @@ const OrderSummary = ({ total }) => {
         fontSize="md"
         bg={useColorModeValue("gray.900", "gray.50")}
         color={useColorModeValue("white", "gray.900")}
+        onClick={() => router.push("/checkout")}
       >
         Checkout
       </Button>

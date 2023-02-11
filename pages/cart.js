@@ -1,8 +1,8 @@
 import { useContext } from "react";
+import { Box, Text, Stack, Heading, Flex } from "@chakra-ui/react";
 
 import CartItem from "@/components/CartItem";
 import { CartContext } from "@/context/CartContext";
-import { Box, Text, Stack, Heading, Flex } from "@chakra-ui/react";
 import OrderSummary from "@/components/OrderSummary";
 
 const CartPage = () => {

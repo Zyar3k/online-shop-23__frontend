@@ -21,6 +21,7 @@ const OrderReview = () => {
   const [isPaid, setIsPaid] = useState(false);
   const [error, setError] = useState(false);
   const [orderLoading, setOrderLoading] = useState(false);
+  const [orderIdDB, setOrderIdDB] = useState(null);
   const { cart } = useContext(CartContext);
   const state = useSelector((state) => state);
 
@@ -34,7 +35,7 @@ const OrderReview = () => {
 
   const handlePlaceOrder = async () => {
     setOrderLoading(true);
-    const user = session.user;
+    const user_id = session.user._id;
     const orderItems = cart.map((cartItem) => {
       return {
         name: cartItem.title,
@@ -48,12 +49,16 @@ const OrderReview = () => {
     const isDelivered = false;
     const paymentMethod = "paypal";
     const reqBody = {
-      user,
+      user_id,
       orderItems,
       shippingAddress,
       isDelivered,
       isPaid,
       paymentMethod,
+      itemsPrice,
+      shippingPrice,
+      taxPrice,
+      totalPrice,
     };
 
     fetch("/api/orders", {
@@ -63,7 +68,7 @@ const OrderReview = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        setOrderIdDB(data._id);
         setDisplayPaypalButtons(true);
       })
       .catch((error) => {
@@ -88,9 +93,10 @@ const OrderReview = () => {
       });
   };
   const onApprove = (data, actions) => {
-    return actions.order.capture().then((details) => {
-      // TODO changes in db
+    return actions.order.capture().then(async (details) => {
       console.log(details);
+      const { id: payment_id, status } = details;
+      const email_address = details.payer.email_address;
       setIsPaid(true);
       toast({
         title: "Payment successful",
@@ -192,7 +198,7 @@ const OrderReview = () => {
           )
         ) : (
           <Button
-            loading={orderLoading}
+            loading={orderLoading.toString()}
             colorScheme="blue"
             size="sm"
             onClick={handlePlaceOrder}

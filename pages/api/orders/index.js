@@ -9,11 +9,12 @@ router.post(async (req, res) => {
     await db.connect();
     const newOrder = new Order({
       ...req.body,
-      user: req.user._id,
+      user: req.body.user_id,
     });
 
     const order = await newOrder.save();
-    res.statusCode(201).send(order);
+    await db.disconnect();
+    res.send({ message: "Order saved", data: order });
   } catch (error) {
     res.send({ message: error });
   }
