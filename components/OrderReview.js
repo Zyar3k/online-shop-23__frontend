@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { usePayPalScriptReducer, PayPalButtons } from "@paypal/react-paypal-js";
 import { CartContext } from "@/context/CartContext";
+import { useRouter } from "next/router";
 
 const OrderReview = () => {
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
@@ -22,11 +23,13 @@ const OrderReview = () => {
   const [error, setError] = useState(false);
   const [orderLoading, setOrderLoading] = useState(false);
   const [orderIdDB, setOrderIdDB] = useState(null);
-  const { cart } = useContext(CartContext);
+  const { cart, clearCart } = useContext(CartContext);
   const state = useSelector((state) => state);
 
   const toast = useToast();
   const { data: session } = useSession();
+
+  const router = useRouter();
 
   const itemsPrice = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
   const shippingPrice = itemsPrice > 200 ? 0 : 15;
@@ -95,8 +98,6 @@ const OrderReview = () => {
   const onApprove = (data, actions) => {
     return actions.order.capture().then(async (details) => {
       console.log(details);
-      const { id: payment_id, status } = details;
-      const email_address = details.payer.email_address;
       setIsPaid(true);
       toast({
         title: "Payment successful",
@@ -105,6 +106,20 @@ const OrderReview = () => {
         duration: 9000,
         isClosable: true,
       });
+      const { id: payment_id, status } = details;
+      const email_address = details.payer.email_address;
+      try {
+        const response = await fetch("/api/payment/details", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ payment_id, status, email_address }),
+        });
+        const data = response.json();
+        clearCart();
+        router.push(`/order/${orderIdDB}`);
+      } catch (error) {
+        setError(true);
+      }
     });
   };
 
