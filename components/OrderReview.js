@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useSession } from "next-auth/react";
 import {
   Heading,
   Box,
@@ -19,18 +20,56 @@ const OrderReview = () => {
   const [displayPaypalButtons, setDisplayPaypalButtons] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
   const [error, setError] = useState(false);
+  const [orderLoading, setOrderLoading] = useState(false);
   const { cart } = useContext(CartContext);
   const state = useSelector((state) => state);
 
   const toast = useToast();
+  const { data: session } = useSession();
 
   const itemsPrice = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
   const shippingPrice = itemsPrice > 200 ? 0 : 15;
   const taxPrice = itemsPrice * 0.15;
   const totalPrice = shippingPrice + taxPrice + itemsPrice;
 
-  const handlePlaceOrder = () => {
-    setDisplayPaypalButtons(true);
+  const handlePlaceOrder = async () => {
+    setOrderLoading(true);
+    const user = session.user;
+    const orderItems = cart.map((cartItem) => {
+      return {
+        name: cartItem.title,
+        description: cartItem.description,
+        image: cartItem.image,
+        quantity: cartItem.qty ? cartItem.qty : 1,
+      };
+    });
+    const shippingAddress = state.shippingAddress;
+    const isPaid = false;
+    const isDelivered = false;
+    const paymentMethod = "paypal";
+    const reqBody = {
+      user,
+      orderItems,
+      shippingAddress,
+      isDelivered,
+      isPaid,
+      paymentMethod,
+    };
+
+    fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reqBody),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setDisplayPaypalButtons(true);
+      })
+      .catch((error) => {
+        setError(true);
+      });
+    setOrderLoading(false);
   };
 
   const createOrder = (data, actions) => {
@@ -152,7 +191,12 @@ const OrderReview = () => {
             />
           )
         ) : (
-          <Button colorScheme="blue" size="sm" onClick={handlePlaceOrder}>
+          <Button
+            loading={orderLoading}
+            colorScheme="blue"
+            size="sm"
+            onClick={handlePlaceOrder}
+          >
             Place order
           </Button>
         )}
