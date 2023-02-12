@@ -1,4 +1,3 @@
-import React from "react";
 import Head from "next/head";
 import {
   Box,
@@ -11,13 +10,14 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+
 import CartIcon from "./CartIcon";
 
 const Layout = ({ children }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { data: session, status } = useSession();
+
   return (
     <div>
       <Head>

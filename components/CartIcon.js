@@ -1,6 +1,7 @@
-import { CartContext } from "@/context/CartContext";
-import { Box, useColorMode, IconButton, Text } from "@chakra-ui/react";
 import { useContext } from "react";
+import { Box, useColorMode, IconButton, Text } from "@chakra-ui/react";
+
+import { CartContext } from "@/context/CartContext";
 
 const CartIcon = () => {
   const { cart } = useContext(CartContext);
@@ -8,6 +9,7 @@ const CartIcon = () => {
   const hoverColor = { light: "gray.800", dark: "gray.100" };
   const iconColor = { light: "gray.600", dark: "gray.300" };
   const fontColor = { light: "gray.800", dark: "gray.100" };
+
   return (
     <Box position="relative">
       <IconButton

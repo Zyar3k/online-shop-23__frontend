@@ -8,6 +8,7 @@ import {
   useColorModeValue,
   CloseButton,
 } from "@chakra-ui/react";
+
 import { CartContext } from "@/context/CartContext";
 
 const CartItem = ({ item }) => {

@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import {
   Heading,
   Box,
@@ -13,8 +14,8 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { usePayPalScriptReducer, PayPalButtons } from "@paypal/react-paypal-js";
+
 import { CartContext } from "@/context/CartContext";
-import { useRouter } from "next/router";
 
 const OrderReview = () => {
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
@@ -95,6 +96,7 @@ const OrderReview = () => {
         return orderID;
       });
   };
+
   const onApprove = (data, actions) => {
     return actions.order.capture().then(async (details) => {
       console.log(details);
@@ -133,6 +135,7 @@ const OrderReview = () => {
       isClosable: true,
     });
   };
+
   useEffect(() => {
     if (displayPaypalButtons) {
       const loadPaymentScript = async () => {
@@ -154,6 +157,7 @@ const OrderReview = () => {
       loadPaymentScript();
     }
   }, [displayPaypalButtons]);
+  
   return (
     <Stack divider={<StackDivider />} spacing="4">
       <Box>

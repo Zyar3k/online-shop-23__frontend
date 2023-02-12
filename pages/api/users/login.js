@@ -4,8 +4,6 @@ import bcrypt from "bcryptjs";
 import User from "@/models/User";
 import { signToken } from "@/utils/auth";
 
-// Default Req and Res are IncomingMessage and ServerResponse
-// You may want to pass in NextApiRequest and NextApiResponse
 const router = createRouter();
 
 router.post(async (req, res) => {
@@ -28,8 +26,6 @@ router.post(async (req, res) => {
   }
 });
 
-// create a handler from router with custom
-// onError and onNoMatch
 export default router.handler({
   onError: (err, req, res) => {
     console.error(err.stack);

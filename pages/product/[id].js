@@ -11,6 +11,7 @@ import {
   useColorModeValue,
   Button,
 } from "@chakra-ui/react";
+
 import db from "@/utils/db";
 import Product from "@/models/Product";
 import { CartContext } from "@/context/CartContext";
@@ -18,9 +19,8 @@ import { CartContext } from "@/context/CartContext";
 const ProductPage = (props) => {
   const { addToCart } = useContext(CartContext);
   const { product } = props;
-  if (!product) {
-    return <div>Product not found</div>;
-  }
+  if (!product) return <div>Product not found</div>;
+
   return (
     <Container maxW={"container.xl"} mt={2}>
       <SimpleGrid columns={[1, 2]} spacing={2}>

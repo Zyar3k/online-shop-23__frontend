@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import * as yup from "yup";
+
 import { signIn } from "next-auth/react";
 
 let signUpSchema = yup.object().shape({
@@ -31,7 +32,6 @@ const SignUpPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {

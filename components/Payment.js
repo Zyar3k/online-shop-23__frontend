@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Radio, RadioGroup, Stack, Flex, Button, Box } from "@chakra-ui/react";
-
 import { useDispatch, useSelector } from "react-redux";
+import { Radio, RadioGroup, Stack, Flex, Button, Box } from "@chakra-ui/react";
 
 const PaymentMethod = () => {
   const dispatch = useDispatch();

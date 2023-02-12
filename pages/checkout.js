@@ -1,10 +1,8 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Heading,
   Progress,
@@ -23,6 +21,7 @@ const CheckoutPage = () => {
     { name: "Payment", component: <PaymentMethod /> },
     { name: "Review", component: <OrderReview /> },
   ];
+
   return (
     <Stack spacing={4}>
       <Progress value={activeStep} max={steps.length} />

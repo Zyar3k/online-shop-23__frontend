@@ -11,6 +11,7 @@ const CartPage = () => {
   const calculateSum = (cartItems) => {
     return cartItems.reduce((acc, item) => acc + item.price, 0);
   };
+
   return (
     <Box
       maxW={{ base: "3xl", lg: "7xl" }}

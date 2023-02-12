@@ -2,8 +2,6 @@ import { createRouter } from "next-connect";
 import db from "@/utils/db";
 import Order from "@/models/Order";
 
-// Default Req and Res are IncomingMessage and ServerResponse
-// You may want to pass in NextApiRequest and NextApiResponse
 const router = createRouter();
 
 router.get(async (req, res) => {
@@ -14,8 +12,6 @@ router.get(async (req, res) => {
   res.send(orders);
 });
 
-// create a handler from router with custom
-// onError and onNoMatch
 export default router.handler({
   onError: (err, req, res) => {
     console.error(err.stack);

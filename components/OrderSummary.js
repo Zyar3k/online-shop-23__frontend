@@ -1,4 +1,3 @@
-import React from "react";
 import { useRouter } from "next/router";
 import {
   Button,
@@ -10,6 +9,7 @@ import {
 
 const OrderSummary = ({ total }) => {
   const router = useRouter();
+
   return (
     <Stack
       spacing={"8"}

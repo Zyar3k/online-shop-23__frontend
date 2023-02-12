@@ -1,12 +1,12 @@
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Provider } from "react-redux";
+import { wrapper } from "@/redux/store";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import Layout from "@/components/Layout";
 
 import { CartProvider } from "@/context/CartContext";
-import { wrapper } from "@/redux/store";
 
 import "@/styles/globals.css";
 
