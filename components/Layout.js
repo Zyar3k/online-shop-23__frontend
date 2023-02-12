@@ -50,6 +50,11 @@ const Layout = ({ children }) => {
               direction={"row"}
               spacing={6}
             >
+              {session && session.user.isAdmin && (
+                <Button as="a" href="/dashboard">
+                  Dashboard
+                </Button>
+              )}
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
